@@ -1,0 +1,72 @@
+{
+  "name": "smart-plug-frontend",
+  "description": "React front-end for ESP32 Smart Plug project with user registration, API key modal, device management, and detailed device monitoring.",
+  "technologies": ["React", "TailwindCSS", "CSS"],
+  "files": [
+    {
+      "path": "package.json",
+      "description": "Project manifest with React, TailwindCSS, and supporting dependencies."
+    },
+    {
+      "path": "tailwind.config.js",
+      "description": "TailwindCSS configuration file."
+    },
+    {
+      "path": "src/index.css",
+      "description": "Global CSS including Tailwind directives and custom styles."
+    },
+    {
+      "path": "src/index.jsx",
+      "description": "Entry point rendering the React App component."
+    },
+    {
+      "path": "src/App.jsx",
+      "description": "Main application component handling routes or view state."
+    },
+    {
+      "path": "src/components/RegistrationForm.jsx",
+      "description": "Component for user signup form (username, email, password)."
+    },
+    {
+      "path": "src/components/ApiKeyModal.jsx",
+      "description": "Modal popup displaying the generated API key with copy functionality."
+    },
+    {
+      "path": "src/components/DeviceDashboard.jsx",
+      "description": "Dashboard listing user devices in cards with status dot and toggle switch, and containing Add Device button."
+    },
+    {
+      "path": "src/components/AddDeviceModal.jsx",
+      "description": "Modal for adding a new device (name and ID)."
+    },
+    {
+      "path": "src/components/DeviceDetailModal.jsx",
+      "description": "Modal for controlling a specific device. Includes name, ID, relay status toggle (iOS-style), total power consumed, and live metrics (voltage, current, power, energy). Also includes a date range selector for fetching historical data via separate API."
+    },
+    {
+      "path": "src/components/RelayToggleSwitch.jsx",
+      "description": "Reusable iOS-style sliding toggle to represent and control device's 'isOnline' relay status."
+    },
+    {
+      "path": "src/components/DateRangePicker.jsx",
+      "description": "Component that allows users to pick a date range to filter historical power data."
+    }
+  ],
+  "projectFlow": [
+    "User lands on registration screen and submits username, email, and password.",
+    "Backend returns an API key displayed in ApiKeyModal (copyable).",
+    "User clicks 'Done' to close modal and navigates to DeviceDashboard.",
+    "DeviceDashboard shows devices in cards with status dot (green for online, red for offline) and toggle switch, each with a Control button.",
+    "Clicking 'Control' opens DeviceDetailModal showing two-column layout with relay toggle switch.",
+    "Right side of modal shows live metrics: voltage, current, power, energy (from live API).",
+    "DateRangePicker allows selecting a range; fetches historical metrics (from separate API)."
+  ],
+  "styling": [
+    "Use TailwindCSS utility classes for layout and responsive styling.",
+    "Status dot positioned on top-right of device card based on online status.",
+    "Toggle switch positioned below status dot, changes color when turned on (indigo-600 when on, gray-200 when off).",
+    "Use a sliding style toggle switch to represent and update device status.",
+    "DeviceDetailModal layout is responsive with left/right panes and bottom date range.",
+    "Custom CSS animations and transitions for modal and toggle styling."
+  ]
+}
