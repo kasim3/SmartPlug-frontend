@@ -22,7 +22,7 @@ const DeviceCard = ({ device, onControlClick, onToggleRelay }) => {
       {/* Status Indicator */}
       <div
         className={`absolute top-4 right-4 w-3 h-3 rounded-full ${
-          device.status === 1 ? "bg-green-500" : "bg-red-500"
+          device.isOnline ? "bg-green-500" : "bg-red-500"
         }`}
       />
 
@@ -31,12 +31,12 @@ const DeviceCard = ({ device, onControlClick, onToggleRelay }) => {
           <div className="flex items-center space-x-3">
             <BoltIcon className="h-7 w-7 text-indigo-600" />
             <h3 className="text-xl font-semibold text-gray-900">
-              {device.name}
+              {device.deviceName}
             </h3>
           </div>
-          <RelayToggleSwitch isOnline={isOnline} onToggle={handleToggle} />
+          <RelayToggleSwitch status={device.status} onToggle={handleToggle} />
         </div>
-        <p className="text-base text-gray-500">ID: {device.id}</p>
+        <p className="text-base text-gray-500">ID: {device._id}</p>
         <button
           onClick={() => onControlClick(device)}
           className="w-full btn-primary py-3 text-base"

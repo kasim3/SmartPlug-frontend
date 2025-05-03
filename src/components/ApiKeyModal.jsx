@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { CheckIcon, ClipboardIcon } from "@heroicons/react/24/outline";
+import { CheckIcon, ClipboardIcon, EyeIcon, EyeSlashIcon  } from "@heroicons/react/24/outline";
 
 const ApiKeyModal = ({ apiKey, onClose }) => {
   const [copied, setCopied] = useState(false);
+  const [showApiKey, setShowApiKey] = useState(false); // State to toggle visibility
   const navigate = useNavigate();
 
   const handleCopy = () => {
@@ -13,7 +14,6 @@ const ApiKeyModal = ({ apiKey, onClose }) => {
   };
 
   const handleDone = () => {
-    localStorage.setItem("apiKey", apiKey);
     navigate("/dashboard");
     onClose();
   };
@@ -27,11 +27,21 @@ const ApiKeyModal = ({ apiKey, onClose }) => {
         </p>
         <div className="flex items-center space-x-2 mb-6">
           <input
-            type="text"
+            type={showApiKey ? "text" : "password"} // Toggle between text and password
             value={apiKey}
             readOnly
             className="flex-1 p-2 border rounded-md bg-gray-50"
           />
+          <button
+            onClick={() => setShowApiKey(!showApiKey)} // Toggle visibility
+            className="p-2 bg-gray-200 text-gray-600 rounded-md hover:bg-gray-300"
+          >
+            {showApiKey ? (
+              <EyeSlashIcon  className="h-5 w-5" />
+            ) : (
+              <EyeIcon className="h-5 w-5" />
+            )}
+          </button>
           <button
             onClick={handleCopy}
             className="p-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"

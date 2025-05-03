@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import DeviceCard from "./DeviceCard";
 import AddDeviceModal from "./AddDeviceModal";
 import DeviceDetailModal from "./DeviceDetailModal";
-import deviceData from "../data/deviceData.json";
 
 const DeviceDashboard = () => {
   const [devices, setDevices] = useState([]);
@@ -12,8 +11,32 @@ const DeviceDashboard = () => {
 
   useEffect(() => {
     // Load devices from deviceData.json
-    setDevices(deviceData.devices);
+    loadAllDeviceDetails();
+    // setDevices(deviceData.devices);
   }, []);
+
+  const loadAllDeviceDetails = async () => {
+    // Mock API call to fetch all device details
+
+    const response = await fetch(
+      "http://localhost:3000/user/device/getAllDevices",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
+    const data = await response.json();
+    if (response.ok) {
+      console.log("Devices loaded successfully:", data);
+
+      setDevices(data.data);
+    } else {
+      console.error("Failed to load devices:", data.message);
+    }
+  };
 
   const handleAddDevice = (newDevice) => {
     // Add new device with mock data
@@ -50,20 +73,28 @@ const DeviceDashboard = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
-      <div className="max-w-7xl mx-auto">
+      <div className="w-7xl mx-auto">
         <h1 className="text-3xl font-bold text-gray-900 mb-8">
           Device Dashboard
         </h1>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-          {devices.map((device) => (
-            <DeviceCard
-              key={device.id}
-              device={device}
-              onControlClick={handleControlClick}
-            />
-          ))}
-        </div>
+        { devices && devices.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            {devices.map((device) => (
+              <DeviceCard
+                key={device.id}
+                device={device}
+                onControlClick={handleControlClick}
+              />
+            ))}
+          </div>
+        ) : (
+          
+          <div className="text-center text-gray-500 my-7">
+            No devices found. Please add a device to get started.
+          </div>  
+
+        )}
 
         <div className="flex justify-center">
           <button onClick={() => setShowAddModal(true)} className="btn-primary">

@@ -4,8 +4,6 @@ import {
   Routes,
   Route,
   Navigate,
-  createBrowserRouter,
-  RouterProvider,
 } from "react-router-dom";
 import RegistrationForm from "./components/RegistrationForm";
 import ApiKeyModal from "./components/ApiKeyModal";
