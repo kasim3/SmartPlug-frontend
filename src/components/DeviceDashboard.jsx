@@ -78,7 +78,7 @@ const DeviceDashboard = () => {
           Device Dashboard
         </h1>
 
-        { devices && devices.length > 0 ? (
+        {devices && devices.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
             {devices.map((device) => (
               <DeviceCard
@@ -89,23 +89,25 @@ const DeviceDashboard = () => {
             ))}
           </div>
         ) : (
-          
           <div className="text-center text-gray-500 my-7">
             No devices found. Please add a device to get started.
-          </div>  
-
+          </div>
         )}
 
-        <div className="flex justify-center">
-          <button onClick={() => setShowAddModal(true)} className="btn-primary">
+        <div className="flex flex-col gap-3.5 justify-center items-center">
+          <button onClick={() => setShowAddModal(true)} className="btn-primary w-[30%]">
             Add Device
           </button>
+          <span className="text-red-600">
+            <span className="font-bold">*note :</span>Plug your Smart Plug to
+            power supply and connect it to a Wi-Fi network.
+          </span>
         </div>
 
         {showAddModal && (
           <AddDeviceModal
-            onClose={() => setShowAddModal(false)}
-            onAdd={handleAddDevice}
+            // onClose={() => setShowAddModal(false)}
+            onSubmit={handleAddDevice}
           />
         )}
 

@@ -9,6 +9,7 @@ import RegistrationForm from "./components/RegistrationForm";
 import ApiKeyModal from "./components/ApiKeyModal";
 import DeviceDashboard from "./components/DeviceDashboard";
 import "./App.css";
+import AuthRoute from './components/AuthRoute';
 
 function App() {
   const [showApiKeyModal, setShowApiKeyModal] = useState(false);
@@ -27,23 +28,22 @@ function App() {
             path="/"
             element={<RegistrationForm onSuccess={handleRegistrationSuccess} />}
           />
+
           <Route
             path="/dashboard"
             element={
-              localStorage.getItem("apiKey") ? (
+              <AuthRoute>
                 <DeviceDashboard />
-              ) : (
-                <Navigate to="/" replace />
-              )
+              </AuthRoute>
             }
           />
         </Routes>
 
-        {showApiKeyModal && (
-          <ApiKeyModal
-            apiKey={apiKey}
-            onClose={() => setShowApiKeyModal(false)}
-          />
+        {showApiKeyModal && localStorage.getItem("token") && (
+            <ApiKeyModal
+              apiKey={apiKey}
+              onClose={() => setShowApiKeyModal(false)}
+            />
         )}
       </div>
     </Router>

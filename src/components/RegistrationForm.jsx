@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const RegistrationForm = ({ onSuccess }) => {
@@ -10,20 +10,24 @@ const RegistrationForm = ({ onSuccess }) => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+
+    if (token) {
+      // Redirect to dashboard if token exists
+      navigate('/dashboard');
+    }
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
     try {
       // Mock API call for testing
-      const mockApiKey =
-        "mock-api-key-" + Math.random().toString(36).substr(2, 9);
-      localStorage.setItem("apiKey", mockApiKey);
-      onSuccess(mockApiKey);
 
       // Uncomment this when backend is ready
-      /*
-      const response = await fetch("http://localhost:3001/api/register", {
+      const response = await fetch("http://localhost:3000/auth/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -32,12 +36,14 @@ const RegistrationForm = ({ onSuccess }) => {
       });
       const data = await response.json();
       if (response.ok) {
-        localStorage.setItem("apiKey", data.apiKey);
-        onSuccess(data.apiKey);
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("userId", data.user.id);
+        onSuccess(data.user.key);
+        console.log(data);
+        
       } else {
         setError(data.message || "Registration failed");
       }
-      */
     } catch (error) {
       console.error("Registration failed:", error);
       setError("Unable to connect to the server. Please try again later.");
