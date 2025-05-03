@@ -10,6 +10,7 @@ import ApiKeyModal from "./components/ApiKeyModal";
 import DeviceDashboard from "./components/DeviceDashboard";
 import "./App.css";
 import AuthRoute from './components/AuthRoute';
+import DeviceDetailModal from "./components/DeviceDetailModal";
 
 function App() {
   const [showApiKeyModal, setShowApiKeyModal] = useState(false);
@@ -34,6 +35,14 @@ function App() {
             element={
               <AuthRoute>
                 <DeviceDashboard />
+              </AuthRoute>
+            }
+          />
+          <Route
+            path="/dashboard/:deviceId"
+            element={
+              <AuthRoute>
+                <DeviceDetailModal />
               </AuthRoute>
             }
           />

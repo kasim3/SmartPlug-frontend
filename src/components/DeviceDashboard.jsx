@@ -2,8 +2,10 @@ import { useState, useEffect } from "react";
 import DeviceCard from "./DeviceCard";
 import AddDeviceModal from "./AddDeviceModal";
 import DeviceDetailModal from "./DeviceDetailModal";
+import { useNavigate } from 'react-router-dom';
 
-const DeviceDashboard = () => {
+const DeviceDashboard = (devicesDetails) => {
+  const navigate = useNavigate();
   const [devices, setDevices] = useState([]);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showDetailModal, setShowDetailModal] = useState(false);
@@ -38,26 +40,13 @@ const DeviceDashboard = () => {
     }
   };
 
-  const handleAddDevice = (newDevice) => {
-    // Add new device with mock data
-    const deviceWithData = {
-      ...newDevice,
-      status: "active",
-      data: {
-        voltage: "220V",
-        current: "0A",
-        power: "0W",
-        energy: "0kWh",
-        totalPower: "0kWh",
-        lastUpdated: new Date().toISOString(),
-      },
-    };
-    setDevices([...devices, deviceWithData]);
-    setShowAddModal(false);
+  const handleAddDevice = () => {
+    loadAllDeviceDetails();
   };
 
-  const handleControlClick = (device) => {
-    setSelectedDevice(device);
+  const handleControlClick = (deviceId) => {
+    navigate(`/dashboard/${deviceId}`);
+    setSelectedDevice(deviceId);
     setShowDetailModal(true);
   };
 
@@ -95,7 +84,10 @@ const DeviceDashboard = () => {
         )}
 
         <div className="flex flex-col gap-3.5 justify-center items-center">
-          <button onClick={() => setShowAddModal(true)} className="btn-primary w-[30%]">
+          <button
+            onClick={() => setShowAddModal(true)}
+            className="btn-primary w-[30%]"
+          >
             Add Device
           </button>
           <span className="text-red-600">
@@ -106,8 +98,10 @@ const DeviceDashboard = () => {
 
         {showAddModal && (
           <AddDeviceModal
-            // onClose={() => setShowAddModal(false)}
+            onClose={() => setShowAddModal(false)}
             onSubmit={handleAddDevice}
+            setShowAddModal={setShowAddModal}
+            showAddModal={showAddModal}
           />
         )}
 

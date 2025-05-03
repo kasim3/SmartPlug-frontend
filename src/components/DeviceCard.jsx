@@ -36,9 +36,9 @@ const DeviceCard = ({ device, onControlClick, onToggleRelay }) => {
           </div>
           <RelayToggleSwitch status={device.status} onToggle={handleToggle} />
         </div>
-        <p className="text-base text-gray-500">ID: {device._id}</p>
+        <p className="text-base text-gray-500">ID: {device.deviceId}</p>
         <button
-          onClick={() => onControlClick(device)}
+          onClick={() => onControlClick(device.deviceId)}
           className="w-full btn-primary py-3 text-base"
         >
           Control Device

@@ -5,7 +5,7 @@ const RelayToggleSwitch = ({ status, onToggle }) => {
     <button
       onClick={onToggle}
       className={`relative inline-flex h-8 w-16 items-center rounded-full transition-all duration-300 ease-in-out ${
-        status
+        status=='1'
           ? "bg-gradient-to-r from-blue-700 to-blue-800"
           : "bg-gradient-to-r from-gray-300 to-gray-400"
       }`}
@@ -17,10 +17,10 @@ const RelayToggleSwitch = ({ status, onToggle }) => {
       />
       <span
         className={`absolute text-xs font-semibold transition-all duration-300 ${
-          status ? "left-1 text-white" : "right-1 text-gray-600"
+          status=='1' ? "left-1 text-white" : "right-1 text-gray-600"
         }`}
       >
-        {status ? "ON" : "OFF"}
+        {status=='1' ? "ON" : "OFF"}
       </span>
     </button>
   );

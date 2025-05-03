@@ -1,6 +1,11 @@
 import { useState } from "react";
 
-const AddDeviceModal = ({ onClose, onSubmit }) => {
+const AddDeviceModal = ({
+  onClose,
+  onSubmit,
+  showAddModal,
+  setShowAddModal,
+}) => {
   const [formData, setFormData] = useState({
     deviceName: "",
     deviceId: "",
@@ -8,16 +13,16 @@ const AddDeviceModal = ({ onClose, onSubmit }) => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-
   const handleSubmit = async (e) => {
+    console.log(showAddModal);
     e.preventDefault();
     setError("");
-    setLoading(true)
+    setLoading(true);
 
     if (formData.deviceName && formData.deviceId) {
       onSubmit(formData);
       console.log(formData);
-      
+
       try {
         // Mock API call for testing
 
@@ -35,12 +40,14 @@ const AddDeviceModal = ({ onClose, onSubmit }) => {
         if (response.ok) {
           console.log(data);
           setLoading(false);
+          setShowAddModal(false);
+          console.log(showAddModal);
         } else {
           setLoading(false);
           setError(data.message || "Registration failed");
         }
-
       } catch (error) {
+        setLoading(false);
         console.error("Registration failed:", error);
         setError("Unable to connect to the server. Please try again later.");
       }
@@ -49,8 +56,8 @@ const AddDeviceModal = ({ onClose, onSubmit }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    console.log(name,value);
-    
+    console.log(name, value);
+
     setFormData((prev) => ({
       ...prev,
       [name]: value,
@@ -110,17 +117,25 @@ const AddDeviceModal = ({ onClose, onSubmit }) => {
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
+              className={`px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-white bg-white hover:bg-gray-50 ${
+                loading
+                  ? "opacity-50 cursor-not-allowed"
+                  : "opacity-100 cursor-pointer"
+              }`}
               disabled={loading}
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700"
+              className={`px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 ${
+                loading
+                  ? "opacity-50 cursor-not-allowed"
+                  : "opacity-100 cursor-pointer"
+              }`}
               disabled={loading}
             >
-              Add Device
+              {loading ? "Adding Device..." : "Add Device"}
             </button>
           </div>
         </form>

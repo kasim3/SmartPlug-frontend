@@ -1,19 +1,39 @@
 import { useState, useEffect } from "react";
 import { BoltIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import DateRangePicker from "./DateRangePicker";
-import deviceData from "../data/deviceData.json";
+// import deviceData from "../data/deviceData.json";
+import { useParams } from 'react-router-dom';
 
 const DeviceDetailModal = ({ device, onClose, onDateRangeChange }) => {
   const [deviceDetails, setDeviceDetails] = useState(null);
   const [historicalData, setHistoricalData] = useState([]);
   const [showHistoricalData, setShowHistoricalData] = useState(false);
+  const { deviceId } = useParams();
 
   useEffect(() => {
-    const foundDevice = deviceData.devices.find((d) => d.id === device.id);
-    if (foundDevice) {
-      setDeviceDetails(foundDevice);
+    fetchDeviceDetails();
+  }, []);
+
+  const fetchDeviceDetails = async () => {
+    const response = await fetch(
+      `http://localhost:3000/user/device/devices/${deviceId}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({ deviceId })
+      }
+    );
+    const data = await response.json();
+    if (response.ok) {
+      console.log("Device details loaded successfully:", data);
+      setDeviceDetails(data.data);
+    } else {
+      console.error("Failed to load device details:", data.message);
     }
-  }, [device.id]);
+  };
 
   const handleDateRangeChange = (range) => {
     const startDate = new Date(range.startDate);
@@ -53,11 +73,11 @@ const DeviceDetailModal = ({ device, onClose, onDateRangeChange }) => {
               <div className="mt-4 space-y-4">
                 <div className="flex items-center">
                   <span className="text-gray-500 w-32">Name:</span>
-                  <span className="text-gray-900">{deviceDetails.name}</span>
+                  <span className="text-gray-900">{deviceDetails.deviceName}</span>
                 </div>
                 <div className="flex items-center">
                   <span className="text-gray-500 w-32">ID:</span>
-                  <span className="text-gray-900">{deviceDetails.id}</span>
+                  <span className="text-gray-900">{deviceDetails.deviceId}</span>
                 </div>
                 <div className="flex items-center">
                   <span className="text-gray-500 w-32">Status:</span>
@@ -77,13 +97,13 @@ const DeviceDetailModal = ({ device, onClose, onDateRangeChange }) => {
                 <div className="flex items-center">
                   <span className="text-gray-500 w-32">Total Power:</span>
                   <span className="text-gray-900">
-                    {deviceDetails.data.totalPower}
+                    {deviceDetails.totalConsumption}
                   </span>
                 </div>
                 <div className="flex items-center">
                   <span className="text-gray-500 w-32">Last Updated:</span>
                   <span className="text-gray-900">
-                    {new Date(deviceDetails.data.lastUpdated).toLocaleString()}
+                    {new Date(deviceDetails.updatedAt).toLocaleString()}
                   </span>
                 </div>
               </div>
@@ -98,25 +118,25 @@ const DeviceDetailModal = ({ device, onClose, onDateRangeChange }) => {
                 <div className="bg-gray-50 p-4 rounded-lg">
                   <div className="text-sm text-gray-500">Voltage</div>
                   <div className="text-xl font-semibold text-gray-900">
-                    {deviceDetails.data.voltage}
+                    {/* {deviceDetails.data.voltage} */}
                   </div>
                 </div>
                 <div className="bg-gray-50 p-4 rounded-lg">
                   <div className="text-sm text-gray-500">Current</div>
                   <div className="text-xl font-semibold text-gray-900">
-                    {deviceDetails.data.current}
+                    {/* {deviceDetails.data.current} */}
                   </div>
                 </div>
                 <div className="bg-gray-50 p-4 rounded-lg">
                   <div className="text-sm text-gray-500">Power</div>
                   <div className="text-xl font-semibold text-gray-900">
-                    {deviceDetails.data.power}
+                    {/* {deviceDetails.data.power} */}
                   </div>
                 </div>
                 <div className="bg-gray-50 p-4 rounded-lg">
                   <div className="text-sm text-gray-500">Energy</div>
                   <div className="text-xl font-semibold text-gray-900">
-                    {deviceDetails.data.energy}
+                    {/* {deviceDetails.data.energy} */}
                   </div>
                 </div>
               </div>
