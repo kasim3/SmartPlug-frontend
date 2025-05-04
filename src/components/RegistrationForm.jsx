@@ -9,7 +9,7 @@ const RegistrationForm = ({ onSuccess }) => {
   });
   const [error, setError] = useState("");
   const navigate = useNavigate();
-
+  const backend_url = process.env.BACKEND_URL || "";
   useEffect(() => {
     const token = localStorage.getItem('token');
 
@@ -27,7 +27,7 @@ const RegistrationForm = ({ onSuccess }) => {
       // Mock API call for testing
 
       // Uncomment this when backend is ready
-      const response = await fetch("http://localhost:3000/auth/register", {
+      const response = await fetch(`${backend_url}/auth/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

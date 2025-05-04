@@ -10,7 +10,7 @@ const DeviceDashboard = (devicesDetails) => {
   const [showAddModal, setShowAddModal] = useState(false);
   const [showDetailModal, setShowDetailModal] = useState(false);
   const [selectedDevice, setSelectedDevice] = useState(null);
-
+  cosnt backend_url = process.env.BACKEND_URL || "";
   useEffect(() => {
     // Load devices from deviceData.json
     loadAllDeviceDetails();
@@ -21,7 +21,7 @@ const DeviceDashboard = (devicesDetails) => {
     // Mock API call to fetch all device details
 
     const response = await fetch(
-      "http://localhost:3000/user/device/getAllDevices",
+      `${backend_url}/user/device/getAllDevices`,
       {
         method: "GET",
         headers: {

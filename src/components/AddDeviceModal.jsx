@@ -13,7 +13,7 @@ const AddDeviceModal = ({
   });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-
+  const backend_url = process.env.BACKEND_URL || "";
   const handleSubmit = async (e) => {
     console.log(showAddModal);
     e.preventDefault();
@@ -28,7 +28,7 @@ const AddDeviceModal = ({
         // Mock API call for testing
 
         // Uncomment this when backend is ready
-        const response = await fetch("http://localhost:3000/user/device/add", {
+        const response = await fetch(`${backend_url}/user/device/add`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

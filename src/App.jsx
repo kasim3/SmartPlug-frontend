@@ -11,6 +11,7 @@ import DeviceDashboard from "./components/DeviceDashboard";
 import "./App.css";
 import AuthRoute from './components/AuthRoute';
 import DeviceDetailModal from "./components/DeviceDetailModal";
+import { Analytics } from '@vercel/analytics/next';
 
 function App() {
   const [showApiKeyModal, setShowApiKeyModal] = useState(false);
@@ -55,6 +56,7 @@ function App() {
             />
         )}
       </div>
+      <Analytics />
     </Router>
   );
 }
