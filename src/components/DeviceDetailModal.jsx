@@ -17,7 +17,7 @@ const DeviceDetailModal = ({ device, onClose, onDateRangeChange }) => {
   const [showHistoricalData, setShowHistoricalData] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isSocket, setIsSocket] = useState(false);
-  const backend_url = process.env.BACKEND_URL || "";  
+  const backend_url = import.meta.env.VITE_BACKEND_URL || "";  
   const { deviceId } = useParams();
 
   useEffect(() => {

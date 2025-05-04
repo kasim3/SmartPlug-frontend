@@ -9,7 +9,7 @@ const RegistrationForm = ({ onSuccess }) => {
   });
   const [error, setError] = useState("");
   const navigate = useNavigate();
-  const backend_url = process.env.BACKEND_URL || "";
+  const backend_url = import.meta.env.VITE_BACKEND_URL || "";
   useEffect(() => {
     const token = localStorage.getItem('token');
 
