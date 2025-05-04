@@ -3,35 +3,81 @@ import { BoltIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import DateRangePicker from "./DateRangePicker";
 // import deviceData from "../data/deviceData.json";
 import { useParams } from 'react-router-dom';
+import { socket } from '../socket';
 
 const DeviceDetailModal = ({ device, onClose, onDateRangeChange }) => {
   const [deviceDetails, setDeviceDetails] = useState(null);
+  const [deviceMetrics, setDeviceMetrics] = useState({
+    voltage: 0,
+    current: 0,
+    power: 0,
+    energy: 0,
+  });
   const [historicalData, setHistoricalData] = useState([]);
   const [showHistoricalData, setShowHistoricalData] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSocket, setIsSocket] = useState(false);
+
   const { deviceId } = useParams();
 
   useEffect(() => {
-    fetchDeviceDetails();
+    const init = async () => {
+      const device = await fetchDeviceDetails();
+      if (device && device.status === 1) {
+        console.log('Connecting socket');
+        socket.connect();
+
+        socket.on('connect', () => {
+          setIsSocket(true);
+          console.log('Connected to socket server');
+
+          socket.timeout(5000).emit('subscribeToDevice', device?.deviceId, () => {
+            setIsLoading(false);
+            console.log('Subscribed to device');
+          });
+        });
+      }
+    };
+
+    init();
+
+    return () => {
+      socket.off('connect');
+      socket.off('deviceMetrics');
+      socket.disconnect();
+    };
   }, []);
 
+  useEffect(() => {
+    if (isSocket) {
+      socket.on('deviceMetrics', (data) => {
+        console.log('Received device data:', data);
+        setDeviceMetrics(data);
+      });
+    }
+  }, [isSocket]);
+
+
   const fetchDeviceDetails = async () => {
+    setIsLoading(true);
     const response = await fetch(
       `http://localhost:3000/user/device/devices/${deviceId}`,
       {
-        method: "POST",
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: JSON.stringify({ deviceId })
+        }
       }
     );
     const data = await response.json();
     if (response.ok) {
       console.log("Device details loaded successfully:", data);
       setDeviceDetails(data.data);
+      return data.data;
     } else {
       console.error("Failed to load device details:", data.message);
+      return null;
     }
   };
 
@@ -83,11 +129,10 @@ const DeviceDetailModal = ({ device, onClose, onDateRangeChange }) => {
                   <span className="text-gray-500 w-32">Status:</span>
                   <div className="flex items-center">
                     <div
-                      className={`w-3 h-3 rounded-full mr-2 ${
-                        deviceDetails.status === 1
-                          ? "bg-green-500"
-                          : "bg-red-500"
-                      }`}
+                      className={`w-3 h-3 rounded-full mr-2 ${deviceDetails.status === 1
+                        ? "bg-green-500"
+                        : "bg-red-500"
+                        }`}
                     />
                     <span className="text-gray-900">
                       {deviceDetails.status === 1 ? "Active" : "Inactive"}
@@ -118,25 +163,25 @@ const DeviceDetailModal = ({ device, onClose, onDateRangeChange }) => {
                 <div className="bg-gray-50 p-4 rounded-lg">
                   <div className="text-sm text-gray-500">Voltage</div>
                   <div className="text-xl font-semibold text-gray-900">
-                    {/* {deviceDetails.data.voltage} */}
+                    {deviceMetrics.voltage}
                   </div>
                 </div>
                 <div className="bg-gray-50 p-4 rounded-lg">
                   <div className="text-sm text-gray-500">Current</div>
                   <div className="text-xl font-semibold text-gray-900">
-                    {/* {deviceDetails.data.current} */}
+                    {deviceMetrics.current}
                   </div>
                 </div>
                 <div className="bg-gray-50 p-4 rounded-lg">
                   <div className="text-sm text-gray-500">Power</div>
                   <div className="text-xl font-semibold text-gray-900">
-                    {/* {deviceDetails.data.power} */}
+                    {deviceMetrics.power}
                   </div>
                 </div>
                 <div className="bg-gray-50 p-4 rounded-lg">
                   <div className="text-sm text-gray-500">Energy</div>
                   <div className="text-xl font-semibold text-gray-900">
-                    {/* {deviceDetails.data.energy} */}
+                    {deviceMetrics.energy}
                   </div>
                 </div>
               </div>

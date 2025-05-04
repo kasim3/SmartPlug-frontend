@@ -5,6 +5,7 @@ const AddDeviceModal = ({
   onSubmit,
   showAddModal,
   setShowAddModal,
+  setDevices,
 }) => {
   const [formData, setFormData] = useState({
     deviceName: "",
@@ -41,6 +42,9 @@ const AddDeviceModal = ({
           console.log(data);
           setLoading(false);
           setShowAddModal(false);
+          setDevices((prevDevices) => [
+            ...prevDevices, data.data,
+          ]);
           console.log(showAddModal);
         } else {
           setLoading(false);
