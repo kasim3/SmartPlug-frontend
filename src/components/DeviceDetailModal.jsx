@@ -2,10 +2,10 @@ import { useState, useEffect } from "react";
 import { BoltIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import DateRangePicker from "./DateRangePicker";
 // import deviceData from "../data/deviceData.json";
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { socket } from '../socket';
 
-const DeviceDetailModal = ({ device, onClose, onDateRangeChange }) => {
+const DeviceDetailModal = () => {
   const [deviceDetails, setDeviceDetails] = useState(null);
   const [deviceMetrics, setDeviceMetrics] = useState({
     voltage: 0,
@@ -102,7 +102,7 @@ const DeviceDetailModal = ({ device, onClose, onDateRangeChange }) => {
         <div className="flex justify-between items-start mb-6">
           <h2 className="text-2xl font-bold text-gray-900">Device Details</h2>
           <button
-            onClick={onClose}
+            onClick={()=>{ useNavigate('/') }}
             className="text-gray-400 hover:text-gray-500"
           >
             <XMarkIcon className="h-6 w-6" />

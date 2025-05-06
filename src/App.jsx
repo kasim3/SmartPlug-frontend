@@ -12,6 +12,7 @@ import "./App.css";
 import AuthRoute from './components/AuthRoute';
 import DeviceDetailModal from "./components/DeviceDetailModal";
 import { Analytics } from '@vercel/analytics/react';
+import LoginForm from "./components/LoginForm";
 
 function App() {
   const [showApiKeyModal, setShowApiKeyModal] = useState(false);
@@ -29,6 +30,10 @@ function App() {
           <Route
             path="/"
             element={<RegistrationForm onSuccess={handleRegistrationSuccess} />}
+          />
+          <Route
+            path="/login"
+            element={<LoginForm />}
           />
 
           <Route

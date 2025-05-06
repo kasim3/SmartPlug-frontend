@@ -20,14 +20,16 @@ const DeviceCard = ({ device, onControlClick, onToggleRelay }) => {
   return (
     <div className="bg-white rounded-lg shadow-md p-8 relative min-w-[300px] min-h-[200px]">
       {/* Status Indicator */}
-      <div
-        className={`absolute top-4 right-4 w-3 h-3 rounded-full ${
-          device.isOnline ? "bg-green-500" : "bg-red-500"
-        }`}
-      />
+      <div className="flex text-black items-center gap-2">
+        <div
+          className={`w-3 h-3 rounded-full ${device.isOnline ? "bg-green-500" : "bg-red-500"
+            }`}
+        />
+        {device.isOnline ? "Online" : "Offline"}
+      </div>
 
       <div className="space-y-6 mt-4">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col gap-4 items-center justify-between">
           <div className="flex items-center space-x-3">
             <BoltIcon className="h-7 w-7 text-indigo-600" />
             <h3 className="text-xl font-semibold text-gray-900">

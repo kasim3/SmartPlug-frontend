@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-const RegistrationForm = ({ onSuccess }) => {
+const LoginForm = () => {
   const [formData, setFormData] = useState({
-    username: "",
     email: "",
     password: "",
   });
@@ -27,7 +26,7 @@ const RegistrationForm = ({ onSuccess }) => {
       // Mock API call for testing
 
       // Uncomment this when backend is ready
-      const response = await fetch(`${backend_url}/auth/register`, {
+      const response = await fetch(`${backend_url}/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -37,10 +36,8 @@ const RegistrationForm = ({ onSuccess }) => {
       const data = await response.json();
       if (response.ok) {
         localStorage.setItem("token", data.token);
-        localStorage.setItem("userId", data.user.id);
-        onSuccess(data.user.key);
-        console.log(data);
-        
+        localStorage.setItem("userId", data.user.id); 
+        useNavigate('/dashboard');
       } else {
         setError(data.message || "Registration failed");
       }
@@ -75,21 +72,6 @@ const RegistrationForm = ({ onSuccess }) => {
         )}
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="rounded-md shadow-sm -space-y-px">
-            <div>
-              <label htmlFor="username" className="sr-only">
-                Username
-              </label>
-              <input
-                id="username"
-                name="username"
-                type="text"
-                required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                placeholder="Username"
-                value={formData.username}
-                onChange={handleChange}
-              />
-            </div>
             <div>
               <label htmlFor="email" className="sr-only">
                 Email address
@@ -127,14 +109,14 @@ const RegistrationForm = ({ onSuccess }) => {
               type="submit"
               className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
-              Sign up
+              Login
             </button>
           </div>
-          <p className="text-center text-black">Have a account? <a href="/login" className="text-blue-300">Login</a></p>
+          <p className="text-center text-black">Don't have a account? <a href="/" className="text-blue-300">Register</a></p>
         </form>
       </div>
     </div>
   );
 };
 
-export default RegistrationForm;
+export default LoginForm;
